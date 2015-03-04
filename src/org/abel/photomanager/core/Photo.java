@@ -59,15 +59,15 @@ public class Photo extends Observable {
 		this.path = path;
 		this.project = project;
 
-		// FIXME: limit the number of threads
-		new Thread(new Runnable() {
+		// FIXME: make a call to the executor of the project is poor design
+		((Project)project).getExecutor().execute(new Runnable() {
 	        
             @Override
             public void run() {
             	load();
             }
             
-        }).start();
+        });
 	}
 	
 	/**

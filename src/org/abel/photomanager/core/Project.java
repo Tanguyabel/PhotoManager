@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.SwingUtilities;
 
 import org.abel.photomanager.core.Photo;
-import org.abel.photomanager.ui.MainWindow;
 
 /**
  * Project associated to a path to a folder on the hard drive, in charge to
@@ -75,9 +76,9 @@ public class Project extends Observable implements Observer {
 				String extension = getFileExtension(f.getName());
 				if ( supportedFiles.contains(extension) ) {
 					photos.addElement(new Photo(f.getAbsolutePath(), this));
-					if (photos.size() >= 30) {
-						break;
-					}
+//					if (photos.size() >= 30) {
+//						break;
+//					}
 				}
 			} else {
 				// FIXME: explore subfolders
@@ -97,4 +98,15 @@ public class Project extends Observable implements Observer {
 		// TODO Auto-generated method stub
 		gui.update(this, photo);
 	}
+	
+	// using an executor to limit the number of running threads
+	private ExecutorService executor = Executors.newFixedThreadPool(30);
+	
+	/**
+	 * Getter for the instance of the executor
+	 */
+	public ExecutorService getExecutor() {
+		return executor;
+	}
+	
 }
