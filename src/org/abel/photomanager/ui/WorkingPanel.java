@@ -53,8 +53,8 @@ public class WorkingPanel extends JPanel implements Observer {
 	public synchronized void update(Observable project, Object photo) {
 
 		photos.add(new WorkingPhoto((Photo)photo,
-				randInt(0, getWidth() - 200),
-				randInt(0, getHeight() - 200),
+				randInt(100, getWidth() - 100),
+				randInt(100, getHeight() - 100),
 				randInt(0, 360)
 		));
 		
@@ -80,7 +80,7 @@ public class WorkingPanel extends JPanel implements Observer {
         g2d.clearRect(0, 0, getWidth(), getHeight());
        
         for (WorkingPhoto p : photos) {
-        	p.drawOn(g2d);
+        		p.drawOn(g2d);
         }
         
         g2d.dispose();

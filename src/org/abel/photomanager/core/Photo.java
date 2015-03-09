@@ -24,29 +24,31 @@ public class Photo extends Observable {
 	 * @param size	The size to scale down to
 	 * @return		The thumbnail image
 	 */
-	static private BufferedImage generateThumbnail(BufferedImage img, int size) {
-		int width = size;
-		int height = size;
+	private void generateThumbnail(int size) {
+		thumbnailW = size;
+		thumbnailH = size;
 		
-		if (img.getWidth() >= img.getHeight()) {
-			height = (int)((double)img.getHeight() / (double)img.getWidth() * size);
+		if (image.getWidth() >= image.getHeight()) {
+			thumbnailH = (int)((double)image.getHeight() / (double)image.getWidth() * size);
 		} else {
-			width = (int)((double)img.getWidth() / (double)img.getHeight() * size);
+			thumbnailW = (int)((double)image.getWidth() / (double)image.getHeight() * size);
 		}
-		 
+
+		/*
 		Image scaledImage = img.getScaledInstance((int)width, (int)height, Image.SCALE_SMOOTH);
 		BufferedImage thumbnail = new BufferedImage((int)width, (int)height, BufferedImage.TYPE_INT_RGB);
 		Graphics g = thumbnail.createGraphics();
 		g.drawImage(scaledImage, 0, 0, new Color(0,0,0), null);
 		g.dispose();
 		
-		return thumbnail;
+		*/
 	}
 	
 	String path;
 	//BufferedImage image;
-	BufferedImage thumbnail;
+	BufferedImage image;
 	boolean isLoaded = false;
+	int thumbnailW, thumbnailH;
 	
 	private Observer project;
 	
@@ -78,8 +80,8 @@ public class Photo extends Observable {
 		// FIMXE: handle metadata
 		
 		try {
-			BufferedImage image = ImageIO.read(new File(path));
-			thumbnail = generateThumbnail(image, 110);
+			image = ImageIO.read(new File(path));
+			generateThumbnail(110);
 			
 		} catch (IOException e) {
 			// handle IO error here
@@ -89,11 +91,27 @@ public class Photo extends Observable {
 	}
 
 	/**
-	 * Getter for the thumbnail
-	 * @return the thumbnail
+	 * Getter for the image
+	 * @return the image
 	 */
-	public BufferedImage getThumbnail() {
+	public BufferedImage getImage() {
 		// TODO Auto-generated method stub
-		return thumbnail;
+		return image;
+	}
+	
+	/**
+	 * Getter for the thumbnail's dimension
+	 * @return the image
+	 */
+	public int getThumbnailWidth() {
+		return thumbnailW;
+	}
+	
+	/**
+	 * Getter for the thumbnail's dimension
+	 * @return the image
+	 */
+	public int getThumbnailHeight() {
+		return thumbnailH;
 	}
 }

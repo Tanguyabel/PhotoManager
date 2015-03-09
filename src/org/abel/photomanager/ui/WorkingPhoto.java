@@ -14,9 +14,12 @@ public class WorkingPhoto {
 	
 	private int x;
 	private int y;
-	
+	private int w;
+	private int h;
 	private double rotation;
 	BufferedImage image;
+	
+	private Photo photo;
 	
 	/**
 	 * Constructor
@@ -26,9 +29,12 @@ public class WorkingPhoto {
 	 * @param r		Initial rotation on the panel
 	 */
 	public WorkingPhoto(Photo photo, int x, int y, int r) {
-		image = photo.getThumbnail();
+		this.photo = photo;
+		image = photo.getImage();
 		this.x  = x;
 		this.y = y;
+		this.w = photo.getThumbnailWidth();
+		this.h = photo.getThumbnailHeight();
 		this.rotation = r;
 	}
 
@@ -42,7 +48,7 @@ public class WorkingPhoto {
 		
 		g.translate(x, y);
         g.rotate(Math.toRadians(rotation), image.getWidth() / 2, image.getHeight() / 2);
-        g.drawImage(image, 0, 0, null);
+        g.drawImage(image, 0, 0, w, h, null);
 	}
 
 }
