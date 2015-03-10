@@ -46,8 +46,8 @@ public class WorkingPhoto {
 		
 		Graphics2D g = (Graphics2D) g2d.create();
 		
-		g.translate(x, y);
-        g.rotate(Math.toRadians(rotation), image.getWidth() / 2, image.getHeight() / 2);
+		g.translate(x - w / 2, y - y / 2);
+		g.rotate(Math.toRadians(rotation), w / 2, h / 2);
         g.drawImage(image, 0, 0, w, h, null);
 	}
 
