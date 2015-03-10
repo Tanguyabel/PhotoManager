@@ -76,9 +76,9 @@ public class Project extends Observable implements Observer {
 				String extension = getFileExtension(f.getName());
 				if ( supportedFiles.contains(extension) ) {
 					photos.addElement(new Photo(f.getAbsolutePath(), this));
-					if (photos.size() >= 100) {
-						break;
-					}
+//					if (photos.size() >= 3) {
+//						break;
+//					}
 				}
 			} else {
 				// FIXME: explore subfolders
@@ -100,7 +100,7 @@ public class Project extends Observable implements Observer {
 	}
 	
 	// using an executor to limit the number of running threads
-	private ExecutorService executor = Executors.newFixedThreadPool(3);
+	private ExecutorService executor = Executors.newFixedThreadPool(10);
 	
 	/**
 	 * Getter for the instance of the executor

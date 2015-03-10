@@ -55,7 +55,7 @@ public class WorkingPanel extends JPanel implements Observer {
 		photos.add(new WorkingPhoto((Photo)photo,
 				randInt(100, getWidth() - 100),
 				randInt(100, getHeight() - 100),
-				randInt(0, 360)
+				randInt(-37, 37)
 		));
 		
 		SwingUtilities.invokeLater(new Runnable() {

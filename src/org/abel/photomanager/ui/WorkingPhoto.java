@@ -18,6 +18,7 @@ public class WorkingPhoto {
 	private int h;
 	private double rotation;
 	BufferedImage image;
+	private double ratio = .4;
 	
 	private Photo photo;
 	
@@ -31,10 +32,10 @@ public class WorkingPhoto {
 	public WorkingPhoto(Photo photo, int x, int y, int r) {
 		this.photo = photo;
 		image = photo.getImage();
-		this.x  = x;
+		this.x = x;
 		this.y = y;
-		this.w = photo.getThumbnailWidth();
-		this.h = photo.getThumbnailHeight();
+		this.w = (int)(photo.getDim().getWidth() * ratio);
+		this.h = (int)(photo.getDim().getHeight() * ratio);
 		this.rotation = r;
 	}
 
@@ -46,7 +47,7 @@ public class WorkingPhoto {
 		
 		Graphics2D g = (Graphics2D) g2d.create();
 		
-		g.translate(x - w / 2, y - y / 2);
+		g.translate(x - w / 2, y - h / 2);
 		g.rotate(Math.toRadians(rotation), w / 2, h / 2);
         g.drawImage(image, 0, 0, w, h, null);
 	}
