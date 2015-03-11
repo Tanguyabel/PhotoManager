@@ -92,7 +92,8 @@ public class Photo extends Observable {
 			}
 			
 			ImageReader reader = (ImageReader)it.next();
-			reader.setInput(iis);
+			//System.out.println("using reader " + reader.getFormatName());
+			reader.setInput(iis, true, false);
 			ImageReadParam param = reader.getDefaultReadParam();
 			
 			computeDimensions(reader.getWidth(0), reader.getHeight(0), commonSize);
