@@ -2,6 +2,8 @@ package org.abel.photomanager.ui;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -18,7 +20,7 @@ import org.abel.photomanager.core.Photo;
  * @author Tanguy Abel
  *
  */
-public class WorkingPanel extends JPanel implements Observer {
+public class WorkingPanel extends JPanel implements Observer, MouseMotionListener {
 	
 	private int translateX = 0;
 	private int translateY = 0;
@@ -42,17 +44,19 @@ public class WorkingPanel extends JPanel implements Observer {
 	 * Constructor
 	 */
 	public WorkingPanel() {
+		addMouseMotionListener(this);
 	}
 
 	/**
 	 * Update the panel when a new picture is loaded from a project
 	 * @param project	The project invoking the update
-	 * @parma photo		The photo to add for display
+	 * @param photo		The photo to add for display
 	 */
 	@Override
 	public synchronized void update(Observable project, Object photo) {
-
+		
 		photos.add(new WorkingPhoto((Photo)photo,
+				//200, 200,
 				randInt(100, getWidth() - 100),
 				randInt(100, getHeight() - 100),
 				randInt(-37, 37)
@@ -84,6 +88,31 @@ public class WorkingPanel extends JPanel implements Observer {
         }
         
         g2d.dispose();
+    } 
+    
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    	
+    	WorkingPhoto focusedPhoto = null;
+    	
+        for (WorkingPhoto p : photos) {
+        	p.setFocus(false);
+    		if (p.checkBoundaries(e.getX(), e.getY())) {
+    			focusedPhoto = p;
+    		}
+        }
+        
+        if (focusedPhoto != null) {
+        	focusedPhoto.setFocus(true);        	
+        }
+        //System.out.println(e.getX() + "," + e.getY());
+        repaint();
     }
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -1,6 +1,9 @@
 package org.abel.photomanager.ui;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import org.abel.photomanager.core.Photo;
@@ -19,6 +22,7 @@ public class WorkingPhoto {
 	private double rotation;
 	BufferedImage image;
 	private double ratio = .4;
+	private boolean focus = false;
 	
 	private Photo photo;
 	
@@ -36,7 +40,7 @@ public class WorkingPhoto {
 		this.y = y;
 		this.w = (int)(photo.getDim().getWidth() * ratio);
 		this.h = (int)(photo.getDim().getHeight() * ratio);
-		this.rotation = r;
+		this.rotation = 0;
 	}
 
 	/**
@@ -47,9 +51,68 @@ public class WorkingPhoto {
 		
 		Graphics2D g = (Graphics2D) g2d.create();
 		
-		g.translate(x - w / 2, y - h / 2);
-		g.rotate(Math.toRadians(rotation), w / 2, h / 2);
-        g.drawImage(image, 0, 0, w, h, null);
+		w = (int)(photo.getDim().getWidth() * ratio);
+		h = (int)(photo.getDim().getHeight() * ratio);
+		
+		g.translate(x, y);
+		//g.rotate(Math.toRadians(rotation), w / 2, h / 2);
+		g.rotate(Math.toRadians(rotation), 0, 0);
+        g.drawImage(image, -w/2, -h/2, w, h, null);
+
+        // debug center
+//        g.setColor(Color.GREEN);
+//        g.fillRect(-5, -5, 10, 10);
+        
+        if (focus) {
+        	g.setStroke(new BasicStroke(3));
+        	g.setColor(Color.CYAN);
+        	g.drawRect(-w/2, -h/2, w, h);
+        }
 	}
 
+	public void setFocus(boolean focus) {
+		this.focus = focus;
+//		if (focus) {
+//			ratio = .6;
+//		} else {
+//			ratio = .4;
+//		}
+	}
+	
+	/**
+	 * check if the position (x, y) is include in the boundaries of the pictures
+	 * @param x x position to check
+	 * @param y y position to check
+	 * @return True if (x, y) is included, false otherwise
+	 */
+	public boolean checkBoundaries(int posX, int posY) {
+		//double r = Math.sqrt(w*w + h*h) / 2;
+		double sr = Math.sin(Math.toRadians(rotation));
+		double cr = Math.cos(Math.toRadians(rotation));
+		
+		Point A = new Point((int)((x - w/2) * cr + (y - h/2) * sr),
+				(int)(-(x - w/2) * sr + (y - h/2) * cr));
+		Point B = new Point((int)((x + w/2) * cr - (y - h/2) * sr),
+				(int)((x + w/2) * sr + (y - h/2) * cr));
+		Point C = new Point((int)((x + w/2) * cr - (y + h/2) * sr),
+				(int)((x + w/2) * sr + (y + h/2) * cr));
+		Point D = new Point((int)((x - w/2) * cr - (y + h/2) * sr),
+				(int)((x - w/2) * sr + (y + h/2) * cr));
+		
+		double abp = (B.x - A.x) * (posY - A.y) - (B.y - A.y) * (posX - A.x);
+		double bcp = (C.x - B.x) * (posY - B.y) - (C.y - B.y) * (posX - B.x);
+		double cdp = (D.x - C.x) * (posY - C.y) - (D.y - C.y) * (posX - C.x);
+		double dap = (A.x - D.x) * (posY - D.y) - (A.y - D.y) * (posX - D.x);
+		
+//		System.out.println("A: " + A.x + ',' + A.y);
+//		System.out.println("B: " + B.x + ',' + B.y);
+//		System.out.println("C: " + C.x + ',' + C.y);
+//		System.out.println("D: " + D.x + ',' + D.y);
+		
+		if (abp > 0 && bcp > 0 && cdp > 0 && dap > 0) {
+			return true;
+		}
+
+		return false;
+	}
 }
