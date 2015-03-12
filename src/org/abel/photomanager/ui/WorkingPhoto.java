@@ -40,7 +40,7 @@ public class WorkingPhoto {
 		this.y = y;
 		this.w = (int)(photo.getDim().getWidth() * ratio);
 		this.h = (int)(photo.getDim().getHeight() * ratio);
-		this.rotation = 0;
+		this.rotation = r;
 	}
 
 	/**
@@ -55,7 +55,6 @@ public class WorkingPhoto {
 		h = (int)(photo.getDim().getHeight() * ratio);
 		
 		g.translate(x, y);
-		//g.rotate(Math.toRadians(rotation), w / 2, h / 2);
 		g.rotate(Math.toRadians(rotation), 0, 0);
         g.drawImage(image, -w/2, -h/2, w, h, null);
 
@@ -86,29 +85,24 @@ public class WorkingPhoto {
 	 * @return True if (x, y) is included, false otherwise
 	 */
 	public boolean checkBoundaries(int posX, int posY) {
-		//double r = Math.sqrt(w*w + h*h) / 2;
+
 		double sr = Math.sin(Math.toRadians(rotation));
 		double cr = Math.cos(Math.toRadians(rotation));
 		
-		Point A = new Point((int)((x - w/2) * cr + (y - h/2) * sr),
-				(int)(-(x - w/2) * sr + (y - h/2) * cr));
-		Point B = new Point((int)((x + w/2) * cr - (y - h/2) * sr),
-				(int)((x + w/2) * sr + (y - h/2) * cr));
-		Point C = new Point((int)((x + w/2) * cr - (y + h/2) * sr),
-				(int)((x + w/2) * sr + (y + h/2) * cr));
-		Point D = new Point((int)((x - w/2) * cr - (y + h/2) * sr),
-				(int)((x - w/2) * sr + (y + h/2) * cr));
+		Point A = new Point((int)(-w/2 * cr + h/2 * sr + x),
+				(int)(-w/2 * sr - h/2 * cr + y));
+		Point B = new Point((int)(w/2 * cr + h/2 * sr + x),
+				(int)(w/2 * sr - h/2 * cr + y));
+		Point C = new Point((int)(w/2 * cr - h/2 * sr + x),
+				(int)(w/2 * sr + h/2 * cr + y));
+		Point D = new Point((int)(-w/2 * cr - h/2 * sr + x),
+				(int)(-w/2 * sr + h/2 * cr + y));
 		
 		double abp = (B.x - A.x) * (posY - A.y) - (B.y - A.y) * (posX - A.x);
 		double bcp = (C.x - B.x) * (posY - B.y) - (C.y - B.y) * (posX - B.x);
 		double cdp = (D.x - C.x) * (posY - C.y) - (D.y - C.y) * (posX - C.x);
 		double dap = (A.x - D.x) * (posY - D.y) - (A.y - D.y) * (posX - D.x);
-		
-//		System.out.println("A: " + A.x + ',' + A.y);
-//		System.out.println("B: " + B.x + ',' + B.y);
-//		System.out.println("C: " + C.x + ',' + C.y);
-//		System.out.println("D: " + D.x + ',' + D.y);
-		
+
 		if (abp > 0 && bcp > 0 && cdp > 0 && dap > 0) {
 			return true;
 		}

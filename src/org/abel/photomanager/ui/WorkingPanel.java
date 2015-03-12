@@ -56,7 +56,6 @@ public class WorkingPanel extends JPanel implements Observer, MouseMotionListene
 	public synchronized void update(Observable project, Object photo) {
 		
 		photos.add(new WorkingPhoto((Photo)photo,
-				//200, 200,
 				randInt(100, getWidth() - 100),
 				randInt(100, getHeight() - 100),
 				randInt(-37, 37)
@@ -105,7 +104,7 @@ public class WorkingPanel extends JPanel implements Observer, MouseMotionListene
         if (focusedPhoto != null) {
         	focusedPhoto.setFocus(true);        	
         }
-        //System.out.println(e.getX() + "," + e.getY());
+
         repaint();
     }
 
